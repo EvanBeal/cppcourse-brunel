@@ -1,11 +1,7 @@
 #include <iostream>
 #include "neuron.cpp"
-#include <fstream>
 
 using namespace std;
-
-double const membranePotIni(0); //initial membrane potential 
-sf::Time const refractoryPeriod(milliseconds(2)); //refractory period after a threshold
 
 int main()
 {
@@ -27,7 +23,7 @@ int main()
     double I(600);
     
     //test
-    Neuron n1(milliseconds(20), 1);
+    Neuron n1(sf::milliseconds(20), 1);
     
     while(simTime < stop) {
         if (timeInterval > start and simTime < timeInterval and I >= 0)

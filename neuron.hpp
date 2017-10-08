@@ -2,6 +2,7 @@
 #define NEURON_HPP
 
 #include <vector>
+using namespace std;
 
 class Neuron
 {
@@ -21,6 +22,12 @@ class Neuron
     Neuron(sf::Time tau, double C); //constructor
     ~Neuron(); //destructor
     
+    //update (will update the membrane potential and determine when there is a spike)
+    void update(sf::Time dt, double current, sf::Time simTime);
+    
+    void writeSpikeTime(sf::Time simTime); // write the time where the spike occured in a different file
+    
+    
     /*
     //getter
     double getMembranePot() const;
@@ -33,9 +40,7 @@ class Neuron
     void setSpikesOccured(vector <double>);
     */
     
-    //update (will update the membrane potential and determine when there is a threshold)
-    void update(sf::Time dt, double current, sf::Time simTime);
-    
+ 
 };
 
 #endif
