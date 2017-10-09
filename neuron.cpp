@@ -1,28 +1,89 @@
 #include "neuron.hpp"
-#include <iostream>
-#include <fstream>
-#include <random>
+#include <cmath>
 
-using namespace std;
+Neuron::Neuron()
+        : refractorySteps_(tauRef_/h_),
+          membranePot_(0.0),
+          nbSpikes_(0),
+          iExt_(0.0),
+          clock_(0),
+          timeSpike_(0)
+          {
+            c1_ = std::exp(-h_/tau_);
+            c2_ = R_ * (1 - c1_);
+           }
 
-double const membranePotIni(0); //initial membrane potential 
-sf::Time const refractoryPeriod(milliseconds(2)); //refractory period after a threshold
+double Neuron::getMembranePot() const
+{
+	//std::cout << " get membrane pot " << membranePot_ << std::endl;
+	return membranePot_;
+}
 
-Neuron::Neuron(sf::Time tau, double C)
-        : tau_(tau),
-          C_(C),
-          isRefractory_(bernoulli_distribution(0.2))
-        {
-            membranePot_ = 0;
-            nbSpikes_ = 0;
-            spikesOccured_.clear();
-            maxPot_ = 20;
-            membranePotentials_.clear();
-            }
+double Neuron::getNbSpikes() const
+{
+	return nbSpikes_;
+}
 
-void Neuron::update(sf::Time h, double current, sf::Time simTime)
+long Neuron::getTimeSpike() const
+{
+	return timeSpike_;
+}
+
+long Neuron::getClock() const 
+{
+	return clock_;
+}
+    
+void Neuron::setIExt(double iExt)
+{
+	iExt_ = iExt;
+}
+
+
+
+bool Neuron::update(long steps)
 {   
-    if (isRefractory_ or refractoryTime < refractoryPeriod) {
+    bool spikeState = false;
+    
+    if (steps <= 0) return false; 
+    
+    long stop = steps + clock_;
+    
+    while (clock_ <= stop) {
+		
+		if (membranePot_ >= spikeThr_) {
+			
+			++nbSpikes_;
+			timeSpike_ = clock_;
+			spikeState = true;
+			
+		}
+		
+		//see if the neuron is refracory after the spike or enough time has passed and we won't enter in this if case
+		
+		if (timeSpike_ > 0 and (clock_ - timeSpike_ < refractorySteps_)) {    //if neuron is refractory we have to reset the membrane potential
+			
+			membranePot_ = 0.0;
+			
+		}
+		
+		else {
+			
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_;
+			//std::cout << " else membrane pot " << membranePot_ << std::endl;
+			
+		}
+		
+		++clock_;
+	}
+    
+    return spikeState;
+}  
+    
+    
+    
+    
+    /*if (isRefractory_ or refractoryTime < refractoryPeriod) {
 		membranePot_ = 0;
 		membranePotentials_.push_back(0);
 	}
@@ -42,8 +103,9 @@ void Neuron::update(sf::Time h, double current, sf::Time simTime)
     membranePotentials_.push_back(membranePot_);
     //membranePotentials_.push_back(simTime);
 	}
-}
+	*/
 
+/*
 void Neuron::writeSpikeTime(sf::Time simTime)
 {
 	ofstream data(spikes.txt);
@@ -55,3 +117,4 @@ void Neuron::writeSpikeTime(sf::Time simTime)
             }
        //data.close();	
 }
+*/

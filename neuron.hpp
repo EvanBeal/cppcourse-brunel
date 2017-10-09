@@ -1,45 +1,44 @@
 #ifndef NEURON_HPP
 #define NEURON_HPP
 
-#include <vector>
-using namespace std;
+#include <cassert>
 
 class Neuron
 {
     private : 
     double membranePot_; // membrane potential
-    double nbSpikes_; //number of spikes    
-    vector <double> spikesOccured_; //times when the spikes occured
-    bool isRefractory_; //determine if the neuron is refractory or not
-    sf::Time tau_; //Time constant = Membrane resistance * C
-    sf::Time tauRef_;
-    double C_; //Number of connections
-    double maxPot_; //Neuron threshold potential
-    vector <double> membranePotentials_; // all the membrane potential between tstart and tstop
+    long nbSpikes_; //number of spikes 
+    long timeSpike_; //time when the last spike occured   
+    long clock_; //time of the neuron
+    double iExt_; //external current
+    
+    double c1_; //constant of integration = exp(-h_/tau_)
+    double c2_; //constant of integration = R_ * (1 - exp(-h_/tau_))
+    
+    const double tau_ = 20.0; //membrane time constant = Membrane resistance * C
+    const double tauRef_ = 2.0; //refractory time
+	const double R_ = 20.0; //membrane resistance
+    const double spikeThr_ = 20.0; //Spike threshold
+    const double h_ = 0.1; //stepsize
+    const long refractorySteps_; //steps per tauRef_
 
     
     public :
-    Neuron(sf::Time tau, double C); //constructor
-    ~Neuron(); //destructor
+    
+    Neuron(); //constructor
+    //~Neuron(); //destructor
     
     //update (will update the membrane potential and determine when there is a spike)
-    void update(sf::Time dt, double current, sf::Time simTime);
+    bool update(long steps); //true if there is a spike 
     
-    void writeSpikeTime(sf::Time simTime); // write the time where the spike occured in a different file
-    
-    
-    /*
     //getter
     double getMembranePot() const;
     double getNbSpikes() const;
-    vector getSpikesOccured() const;
+    long getTimeSpike() const;
+    long getClock() const;
     
     //setter
-    void setMembranePot(double);
-    void setNbSpikes(double);
-    void setSpikesOccured(vector <double>);
-    */
-    
+    void setIExt(double iExt);
  
 };
 
