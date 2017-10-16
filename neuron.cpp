@@ -7,15 +7,19 @@ Neuron::Neuron()
           nbSpikes_(0),
           iExt_(0.0),
           clock_(0),
-          timeSpike_(0)
+          timeSpike_(0),
+          amplitude_(0.1),
+          D_(1.5),
+          ringBuffer_()
           {
             c1_ = std::exp(-h_/tau_);
             c2_ = R_ * (1 - c1_);
+            ringBuffer_.empty();
+            ringBuffer_.resize(D_/h_ + 1);
            }
 
 double Neuron::getMembranePot() const
 {
-	//std::cout << " get membrane pot " << membranePot_ << std::endl;
 	return membranePot_;
 }
 
@@ -33,23 +37,31 @@ long Neuron::getClock() const
 {
 	return clock_;
 }
+
+double Neuron::getJ() const
+{
+	return amplitude_;
+}
     
 void Neuron::setIExt(double iExt)
 {
 	iExt_ = iExt;
 }
 
+void Neuron::setRingBuffer(int position)
+{
+	ringBuffer_[position] += amplitude_;
+}
 
 
 bool Neuron::update(long steps)
 {   
     bool spikeState = false;
     
+    int x(D_/h_ + 1);
+    
     if (steps <= 0) return false; 
     
-    long stop = steps + clock_;
-    
-    while (clock_ <= stop) {
 		
 		if (membranePot_ >= spikeThr_) {
 			
@@ -59,7 +71,7 @@ bool Neuron::update(long steps)
 			
 		}
 		
-		//see if the neuron is refracory after the spike or enough time has passed and we won't enter in this if case
+		//see if the neuron is refractory after the spike or enough time has passed and we won't enter in this if case
 		
 		if (timeSpike_ > 0 and (clock_ - timeSpike_ < refractorySteps_)) {    //if neuron is refractory we have to reset the membrane potential
 			
@@ -69,18 +81,20 @@ bool Neuron::update(long steps)
 		
 		else {
 			
-			membranePot_ = c1_ * membranePot_ + iExt_ * c2_;
-			//std::cout << " else membrane pot " << membranePot_ << std::endl;
-			
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x];
+			ringBuffer_[steps % x] = 0.0;
 		}
 		
 		++clock_;
-	}
     
     return spikeState;
-}  
-    
-    
+} 
+
+void Neuron::receive(long steps, double amplitude)
+{
+	int x(D_/h_ + 1);
+	ringBuffer_[steps % x] += amplitude;
+} 
     
     
     /*if (isRefractory_ or refractoryTime < refractoryPeriod) {
