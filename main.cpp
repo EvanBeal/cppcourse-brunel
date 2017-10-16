@@ -1,5 +1,5 @@
 #include <iostream>
-#include "neuron.cpp"
+#include "neuron.hpp"
 
 #include <fstream>
 #include <vector>
