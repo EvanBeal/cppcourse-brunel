@@ -2,14 +2,14 @@
 #include <cmath>
 
 Neuron::Neuron()
-        : refractorySteps_(tauRef_/h_),
+        : //refractorySteps_(tauRef_/h_),
           membranePot_(0.0),
           nbSpikes_(0),
           iExt_(0.0),
           clock_(0),
           timeSpike_(0),
-          amplitude_(0.1),
-          D_(1.5),
+          //amplitude_(0.1),
+          //D_(1.5),
           ringBuffer_()
           {
             c1_ = std::exp(-h_/tau_);
