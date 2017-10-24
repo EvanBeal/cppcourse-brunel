@@ -1,22 +1,38 @@
 #include "neuron.hpp"
 #include <cmath>
+#include <random>
 
-Neuron::Neuron()
-        : //refractorySteps_(tauRef_/h_),
+Neuron::Neuron(Type type)
+        : type_(type),
           membranePot_(0.0),
           nbSpikes_(0),
           iExt_(0.0),
           clock_(0),
           timeSpike_(0),
-          //amplitude_(0.1),
-          //D_(1.5),
           ringBuffer_()
           {
+			if (type_ == excitatory) {
+				amplitude_ = amplitudeExcitatory_;
+			}
+			else {
+				amplitude_ = amplitudeInhibitory_;
+			}
             c1_ = std::exp(-h_/tau_);
             c2_ = R_ * (1 - c1_);
             ringBuffer_.empty();
             ringBuffer_.resize(D_/h_ + 1);
            }
+           
+/* faire un tableau de tableau de int représentant pour chaque ligne un neurone
+ * et chaque colonne le nombre de connexions qu'il a avec chaque neuron
+ * prendre un neurone et regarder lesquels sont connectés à lui
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 
 double Neuron::getMembranePot() const
 {
@@ -80,8 +96,10 @@ bool Neuron::update(long steps)
 		}
 		
 		else {
-			
-			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x];
+			std::poisson_distribution<> poisson(Vext_ * connexionExcitatory_ * h_ * amplitude_);
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);
 			ringBuffer_[steps % x] = 0.0;
 		}
 		

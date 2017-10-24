@@ -5,6 +5,8 @@
 #include <cassert>
 #include <vector>
 
+enum Type {inhibitory, excitatory}; //determine the type of neuron
+
 class Neuron
 {
     private : 
@@ -17,6 +19,8 @@ class Neuron
     double c1_; //constant of integration = exp(-h_/tau_)
     double c2_; //constant of integration = R_ * (1 - exp(-h_/tau_))
     
+    Type type_; //determine the type of the neuron
+    
     /*
     const double tau_ = 20.0; //membrane time constant = Membrane resistance * C
     const double tauRef_ = 2.0; //refractory time(ms)
@@ -28,15 +32,17 @@ class Neuron
     
     std::vector<double> ringBuffer_; //ring buffer to deal with the delay between spikes of different neurons
     
-    /*
+  
     const double amplitude_; //the amplitude (J)
+    
+    /*
     const double D_; //the delay
     */
 
     
     public :
     
-    Neuron(); //constructor
+    Neuron(Type type); //constructor
     //~Neuron(); //destructor
     
     //update (will update the membrane potential and determine when there is a spike)

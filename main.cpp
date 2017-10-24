@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <vector>
+#include <array>
 
 using namespace std;
 
@@ -64,16 +65,46 @@ int main()
     bool spike1(false);
     bool spike2(false);
     
-    //faire un vector de neuron et iterer dessus pour les différents update et getter
+    //test with the network
+    int numberNeurons(12500);
+    
+    array<Neuron*, numberNeurons> neurons; //the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory
+    array<array<int, numberNeurons>, numberNeurons> network; //the network of the connections between the neurons (if we want to know to which neuron is connected the neuron 5 for example we loik on the line 5 and see the number on the column to know to which neuron it's connected)
+    
+    for (int i(0); i < numberNeurons * 0.8; ++i) { //initiate the 10'000 first neurons to the excitatory type
+		neurons[i] = new Neuron(excitatory);
+	}
+	
+	for (int i(numberNeurons * 0.8 + 1); i < numberNeurons; ++i) { //initiate the 2'500 following to the inhibitory type
+		neurons[i] = new Neuron(inhibitory);
+	}
+	
+	for (int i(0); i < numberNeurons; ++i) { //initiate the network
+		for (int j(0); j < numberNeurons; ++j) {
+			network[i][j] = 0;
+		}
+	}
+		
+    
+	while(currentStep < stop) {
+		
+		for (int j(0); j < numberNeurons; ++i) {
+			
+			for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) {
+			std::random_device rd;  //Will be used to obtain a seed for the random number engine
+			std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+			std::uniform_int_distribution<> dis(0, numberNeurons * 0.8 - 1);
+			network[dis][j] += 1;
+		}
+			for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) {
+			std::random_device rd;  //Will be used to obtain a seed for the random number engine
+			std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+			std::uniform_int_distribution<> dis(numberNeurons * 0.8, numberNeurons - 1);
+			network[dis][j] += 1;	 
+		}
+		
+	}
     /*
-    vector <Neuron> neurons;
-    
-    neurons.push_back(n1);
-    neurons.push_back(n2);
-    */
-    
-    //faire des for auto
-    
     while(currentStep < stop) {
 		
         if (Istart > start and Istop < stop and I > 0
@@ -120,41 +151,10 @@ int main()
         currentStep += 1;
         
     }
+    */
     
      data.close();
     
         return 0;
 }
 
-/*for (auto& n : neurons) {
-					
-					
-					if (spike) {
-					
-            			data << "Spike at t = " << n.getTimeSpike() * 0.1 << " ms" << endl;
-
-					}
-					
-				
-				n.setIExt(I);
-                n.update(1);
-
-            			data << n.getMembranePot() << "pA" << '\t' << "at T = " << n.getClock() * 0.1 << " ms" << '\t' << '\t';
-					
-				}
-				
-				data << endl;
-                
-			}
-			
-        else {
-			
-			for (auto& n : neurons) {
-				
-				n.setIExt(Iext);
-                n.update(1);
-                
-            			data << n.getMembranePot() << "pA" << '\t' << "at T = " << n.getClock() * 0.1 << " ms" << '\t' << '\t';
-
-			}
-*/
