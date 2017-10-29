@@ -33,7 +33,7 @@ class Neuron
     std::vector<double> ringBuffer_; //ring buffer to deal with the delay between spikes of different neurons
     
   
-    const double amplitude_; //the amplitude (J)
+    double amplitude_; //the amplitude (J)
     
     /*
     const double D_; //the delay

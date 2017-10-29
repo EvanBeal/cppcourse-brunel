@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <random>
 
 using namespace std;
 
@@ -69,7 +70,7 @@ int main()
     bool spike(false);
     
     //test with the network
-    int numberNeurons(12500);
+    const int numberNeurons(12500);
     
     array<Neuron*, numberNeurons> neurons; //the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory
     array<array<int, numberNeurons>, numberNeurons> network; //the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
@@ -89,20 +90,20 @@ int main()
 	}
 		
 		
-	for (int j(0); j < numberNeurons; ++i) {
+	for (int j(0); j < numberNeurons; ++j) {
 			
 		for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) {
-			std::random_device rd;  //Will be used to obtain a seed for the random number engine
-			std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-			std::uniform_int_distribution<> dis(0, numberNeurons * 0.8 - 1);
-			network[dis][j] += 1;
+			random_device rd;  //Will be used to obtain a seed for the random number engine
+			mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+			uniform_int_distribution<> dis(0, numberNeurons * 0.8 - 1);
+			network[dis(gen)][j] += 1;
 		}
 		
 		for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) {
-			std::random_device rd;  //Will be used to obtain a seed for the random number engine
-			std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-			std::uniform_int_distribution<> dis(numberNeurons * 0.8, numberNeurons - 1);
-			network[dis][j] += 1;	 
+			random_device rd;  //Will be used to obtain a seed for the random number engine
+			mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+			uniform_int_distribution<> dis(numberNeurons * 0.8, numberNeurons - 1);
+			network[dis(gen)][j] += 1;	 
 		}
 			
 	}
@@ -114,9 +115,9 @@ int main()
 	
 				for (int i(0); i < numberNeurons; ++i) {
 					
-					neurons[i].setIExt(I);
+					neurons[i]->setIExt(I);
 		
-					spike = neurons[i].update(currentStep);
+					spike = neurons[i]->update(currentStep);
 					
 					if (spike) {
 						
@@ -124,7 +125,7 @@ int main()
 							
 							if (network[i][j] != 0) {
 								
-								neurons[j].receive(currentStep, network[i][j] * neurons[i].getJ());  //network[i][j] * neurons[i].getJ() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
+								neurons[j]->receive(currentStep, network[i][j] * neurons[i]->getJ());  //network[i][j] * neurons[i].getJ() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
 							
 					}
 		
@@ -140,9 +141,9 @@ int main()
 		
 		for (int i(0); i < numberNeurons; ++i) {
 					
-					neurons[i].setIExt(Iext);
+					neurons[i]->setIExt(Iext);
 		
-					spike = neurons[i].update(currentStep);
+					spike = neurons[i]->update(currentStep);
 					
 					if (spike) {
 						
@@ -150,7 +151,7 @@ int main()
 							
 							if (network[i][j] != 0) {
 								
-								neurons[j].receive(currentStep, network[i][j] * neurons[i].getJ());  //network[i][j] * neurons[i].getJ() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
+								neurons[j]->receive(currentStep, network[i][j] * neurons[i]->getJ());  //network[i][j] * neurons[i].getJ() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
 							
 					}
 		
