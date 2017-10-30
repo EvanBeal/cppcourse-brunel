@@ -147,11 +147,11 @@ bool Neuron::update(long steps)
 		///
 		
 		else {
-			std::poisson_distribution<> poisson(Vext_ * connexionExcitatory_ * h_ * amplitude_);
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x];
-			// + poisson(gen);
+			//static std::poisson_distribution<> poisson(Vext_ * connexionExcitatory_ * h_ * amplitude_);
+			static std::poisson_distribution<> poisson(2); ///< static so it exists only once and like this we don't create pattern
+			static std::random_device rd;
+			static std::mt19937 gen(rd());
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);
 			ringBuffer_[steps % x] = 0.0;
 		}
 		
@@ -162,6 +162,65 @@ bool Neuron::update(long steps)
     
     return spikeState;
 } 
+
+///
+/// boolean update a neuron without the poisson function to see is the rest if running correctly
+/// will determine whether the neuron is spiking or not
+/// @param steps
+/// @return true if the neuron spike
+///
+bool Neuron::updateTest(long steps)
+{   
+    bool spikeState = false; ///< initiate the spike state that will be return at the end of the function at false
+    
+    int x(D_/h_ + 1); ///< will be used for the ringbuffer
+    
+    if (steps < 0) return false; ///< we can't update if there isn't a positive number of steps
+    
+    const long t_stop(clock_ + steps);
+    
+    
+    while (clock_ < t_stop) {
+    
+		///
+		/// if case to see of the neuron is spiking 
+		/// test if the membrane potential is higher that the spike threshold
+		/// if it's the case the spike state becomes true, we add a spike to the number of spike and we take the current time of the neuron to be the time spike which represent last time a spike occured
+		///
+		
+		if (membranePot_ >= spikeThr_) {
+			
+			++nbSpikes_;
+			timeSpike_ = clock_;
+			spikeState = true;
+		}
+		
+		///
+		/// if case to see if the neuron is refractory after the spike or enough time has passed and we won't enter in this if case
+		///
+		
+		if (timeSpike_ > 0 and (clock_ - timeSpike_ < refractorySteps_)) {    ///<if neuron is refractory we have to reset the membrane potential
+			
+			membranePot_ = 0.0;
+			
+		}
+		
+		///
+		/// if the neuron is not refractory we have to calculate the membrane potential
+		///
+		
+		else {
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[t_stop % x];
+			ringBuffer_[t_stop % x] = 0.0;
+		}
+		
+		
+		++clock_;
+		
+	}
+    
+    return spikeState;
+}
 
 ///
 /// void function that can store the spike signal of a pre synaptic neuron in the post synaptic neuron on order to use it after the delay

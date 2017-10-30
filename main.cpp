@@ -25,6 +25,7 @@ int main()
     ///
     double Iext(0.0);
     
+    /*
     ///
     ///choices of the user
     ///
@@ -56,7 +57,8 @@ int main()
 				cin.clear();
 			}
 	} 
-    
+    */
+    /*
     cout << "Choose your current : ";
     
     while (I <= 0.0) {
@@ -66,6 +68,7 @@ int main()
 				cin.clear();
 			}
 		}
+		*/
     
     ofstream data("spikes.txt"); ///< open the file where the values will be written
     
@@ -76,7 +79,7 @@ int main()
     ///
     const int numberNeurons(1250);
     
-    vector<Neuron> neurons; ///< the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory
+    vector<Neuron> neurons; ///< the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory // try with deque
     array<array<int, numberNeurons>, numberNeurons> network; ///< the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
     
     ///
@@ -132,7 +135,7 @@ int main()
 	///
 	while(currentStep < stop) {
 		
-		cout << "currentstep  " << currentStep << endl;
+		/*cout << "currentstep  " << currentStep << endl;
 		
 		if (Istart > start and Istop < stop and I > 0
 			and Istart < currentStep and Istop > currentStep) {
@@ -145,33 +148,7 @@ int main()
 					
 					if (spike) {
 						
-						for (int j(0); j < numberNeurons; ++j) {
-							
-							if (network[i][j] != 0) {
-								
-								neurons[j].receive(currentStep, network[i][j] * neurons[i].getAmplitude());  ///<network[i][j] * neurons[i].getAmplitude() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
-							
-					}
-		
-				}
-			
-			}
-		
-		}
-		
-		data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
-	
-	}
-	
-	else {
-		
-		for (int i(0); i < numberNeurons; ++i) {
-					
-					neurons[i].setIExt(Iext);
-		
-					spike = neurons[i].update(1); 
-					
-					if (spike) {
+						data << neurons[i].getClock() * h << '\t' << i << '\n';
 						
 						for (int j(0); j < numberNeurons; ++j) {
 							
@@ -187,9 +164,40 @@ int main()
 		
 		}
 		
-		data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
-			
+		//data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
+	
 	}
+	
+	else { 
+	*/
+		
+		for (int i(0); i < numberNeurons; ++i) {
+					
+					neurons[i].setIExt(Iext);
+		
+					spike = neurons[i].update(1); 
+					
+					if (spike) {
+						
+						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
+						
+						for (int j(0); j < numberNeurons; ++j) {
+							
+							if (network[i][j] != 0) {
+								
+								neurons[j].receive(currentStep, network[i][j] * neurons[i].getAmplitude());  ///<network[i][j] * neurons[i].getAmplitude() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
+							
+					}
+		
+				}
+			
+			}
+		
+		}
+		
+		//data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
+			
+	//}
 	
 	currentStep += 1;
 	

@@ -32,6 +32,8 @@ class Neuron
     
     bool update(long steps); ///<true if there is a spike 
     
+    bool updateTest(long steps); ///<is like the update function but without the random term poisson so we can see if the rest is acting accurately
+    
     void receive(long steps, double amplitude); ///<update the membrane potential of a post synaptic neuron after the spike of the pre synaptic neuron
     
     ///
