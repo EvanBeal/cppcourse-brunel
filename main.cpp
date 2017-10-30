@@ -77,10 +77,10 @@ int main()
     ///
     ///test with a network of 12'500 neurons with 80% of excitatory neurons and 20% of inhibitory
     ///
-    const int numberNeurons(1250);
+    const int numberNeurons(12500);
     
     vector<Neuron> neurons; ///< the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory // try with deque
-    array<array<int, numberNeurons>, numberNeurons> network; ///< the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
+    vector<vector<int>> network; ///< the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
     
     ///
     ///initialization of the 10'000 first neurons to the excitatory type
@@ -102,9 +102,10 @@ int main()
 	///initialization of the network of connections with a 0 everywhere
 	///
 	for (int i(0); i < numberNeurons; ++i) { 
-		for (int j(0); j < numberNeurons; ++j) {
-			network[i][j] = 0;
-		}
+		
+			vector<int> neuronList;
+			network.push_back(neuronList);
+		
 	}
 		
 	///
@@ -114,17 +115,17 @@ int main()
 	for (int j(0); j < numberNeurons; ++j) {
 			
 		for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the excitatory neurons
-			random_device rd;  
-			mt19937 gen(rd()); 
-			uniform_int_distribution<> dis(0, numberNeurons * 0.8 - 1);
-			network[dis(gen)][j] += 1;
+			static random_device rd;  
+			static mt19937 gen(rd()); 
+			static uniform_int_distribution<> connectionFromExcitatory(0, numberNeurons * 0.8 - 1);
+			network[connectionFromExcitatory(gen)].push_back(j);
 		}
 		
 		for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< crate the random connections with the inhibitory neurons
-			random_device rd;  
-			mt19937 gen(rd()); 
-			uniform_int_distribution<> dis(numberNeurons * 0.8, numberNeurons - 1);
-			network[dis(gen)][j] += 1;	 
+			static random_device rd;  
+			static mt19937 gen(rd()); 
+			static uniform_int_distribution<> connectionFromInhibitory(numberNeurons * 0.8, numberNeurons - 1);
+			network[connectionFromInhibitory(gen)].push_back(j);	 
 		}
 			
 	}
@@ -181,27 +182,28 @@ int main()
 						
 						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
 						
-						for (int j(0); j < numberNeurons; ++j) {
-							
-							if (network[i][j] != 0) {
+						for (int j(0); j < network[i].size(); ++j) {
 								
-								neurons[j].receive(currentStep, network[i][j] * neurons[i].getAmplitude());  ///<network[i][j] * neurons[i].getAmplitude() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
+								neurons[network[i][j]].receive(currentStep, neurons[i].getAmplitude());  
 							
 					}
-		
 				}
-			
 			}
+			
+			// data << neurons[1].getClock() * h << '\t' << neurons[1].getMembranePot() << '\n';
 		
-		}
+		//}
 		
 		//data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
 			
 	//}
 	
-	currentStep += 1;
+		
+		cout << currentStep << endl;
+		
+		currentStep += 1;
 	
-}
+	}
 
      data.close();
     
