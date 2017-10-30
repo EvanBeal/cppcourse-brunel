@@ -198,7 +198,7 @@ TEST (NeuronTest, SimpleConnectionExcitatoryExcitatoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
+	neuron2.receive(925, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -251,7 +251,7 @@ TEST (NeuronTest, SimpleConnectionInhibitoryInhibitoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
+	neuron2.receive(925, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -303,7 +303,7 @@ TEST (NeuronTest, SimpleConnectionExcitatoryInhibitoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
+	neuron2.receive(925, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -355,7 +355,7 @@ TEST (NeuronTest, SimpleConnectionInhibitoryExcitatoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
+	neuron2.receive(925, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -394,7 +394,7 @@ TEST (NeuronTest, SimpleConnectionExcitatoryExcitatoryWithSpikeForTheSecond)
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i + delay, neuron1.getAmplitude());
+			neuron2.receive(i, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -430,7 +430,7 @@ TEST (NeuronTest, SimpleConnectionExcitatoryInhibitoryWithSpikeForTheSecond)
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i + delay, neuron1.getAmplitude());
+			neuron2.receive(i, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -465,7 +465,7 @@ TEST (NeuronTest, SimpleConnectionInhibitoryExcitatoryWithCurrentForTheSecondToo
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i + delay, neuron1.getAmplitude());
+			neuron2.receive(i, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -500,7 +500,7 @@ TEST (NeuronTest, SimpleConnectionInhibitoryInhibitoryWithCurrentForTheSecondToo
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i + delay, neuron1.getAmplitude());
+			neuron2.receive(i, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		

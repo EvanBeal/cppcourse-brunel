@@ -28,10 +28,10 @@ Neuron::Neuron(Type type)
             ringBuffer_.resize(D_/h_ + 1);
            }
            
- ///
- /// getter of the membrane potential
- /// @return membranePot_
- ///
+///
+/// getter of the membrane potential
+/// @return membranePot_
+///
 
 double Neuron::getMembranePot() const
 {
@@ -130,6 +130,7 @@ bool Neuron::update(long steps)
 			++nbSpikes_;
 			timeSpike_ = clock_;
 			spikeState = true;
+			std::cout << "update --> spike" << std::endl;
 		}
 		
 		///
@@ -230,7 +231,8 @@ bool Neuron::updateTest(long steps)
 void Neuron::receive(long steps, double amplitude)
 {
 	int x(D_/h_ + 1);
-	ringBuffer_[steps % x] += amplitude;
+	int y(D_/h_);
+	ringBuffer_[(steps + y) % x] += amplitude;
 } 
     
     

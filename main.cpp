@@ -1,5 +1,6 @@
 #include <iostream>
-#include "neuron.hpp"
+//#include "neuron.hpp"
+#include "network.hpp"
 
 #include <fstream>
 #include <vector>
@@ -10,6 +11,7 @@ using namespace std;
 
 int main()
 {
+	/*
 	///
     ///Steps
     ///
@@ -24,16 +26,23 @@ int main()
     ///External Current
     ///
     double Iext(0.0);
+    */
+    
+    double currentStep(0);
     
     ofstream data("spikes.txt"); ///< open the file where the values will be written
     
     bool spike(false); ///< initiate a boolean that will be used after to determine whether the neuron is spiking or not
     
+    Network network; ///< create a network of neurons with their connections
+    
+    /*
     ///
     ///test with a network of 12'500 neurons with 80% of excitatory neurons and 20% of inhibitory
     ///
     const int numberNeurons(12500);
-    
+    */
+    /*
     vector<Neuron> neurons; ///< the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory // try with deque
     vector<vector<int>> network; ///< the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
     
@@ -84,6 +93,7 @@ int main()
 		}
 			
 	}
+	*/
 	
 	///
 	/// running the simulation by updating the neuron every time step
@@ -93,18 +103,28 @@ int main()
 		
 		for (int i(0); i < numberNeurons; ++i) {
 					
-					neurons[i].setIExt(Iext);
+					//neurons[i].setIExt(Iext);
+					//network.getNeuron(i).setIExt(Iext);
 		
-					spike = neurons[i].update(1); 
+					//spike = neurons[i].update(1);
+					spike = network.getNeuron(i).update(1);
 					
 					if (spike) {
 						
-						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
+						//data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
+						data << network.getNeuron(i).getClock() * h << '\t' << i + 1 << '\n';
 						
+						/*
 						for (int j(0); j < network[i].size(); ++j) {
 								
 								neurons[network[i][j]].receive(currentStep, neurons[i].getAmplitude());  
 							
+					}
+					*/
+					
+						for (int j(0); j < network.getNetworkSize(i); ++j) {
+							
+							network.getNeuron(network.getNeuronConnected(i, j)).receive(currentStep, network.getNeuron(i).getAmplitude());
 					}
 				}
 			}

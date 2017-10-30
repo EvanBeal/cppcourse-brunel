@@ -17,6 +17,23 @@
     const double connexionInhibitory_ = 250; ///<the number of connexion that the neuron receives from inhibitories neurons
     
     const double Vext_ = 0.02; ///<the number of spikes per connexion * ms
+    
+    ///
+    ///Steps
+    ///
+    const double start(0);
+    const double stop(2000);
+    const double h(0.1); ///<1 step = 0.1ms
+    
+    ///
+    ///External Current
+    ///
+    const double Iext(0.0);
+    
+    ///
+    ///test with a network of 12'500 neurons with 80% of excitatory neurons and 20% of inhibitory
+    ///
+    const int numberNeurons(12500);
 
 
 #endif
