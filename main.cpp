@@ -25,51 +25,6 @@ int main()
     ///
     double Iext(0.0);
     
-    /*
-    ///
-    ///choices of the user
-    ///
-    long Istart(-1);
-    long Istop(0);
-    double I(0.0);
-    
-    /// 
-    /// allow the user to enter the value wanted
-    /// and verify if there in the good range or an exploitable value
-    ///
-    
-    cout << "Start a current at (step) : ";
-    
-    while (Istart < 0 or Istart > stop) {
-		cin >> Istart;
-			if (Istart < 0.0 or Istart > stop) {
-				cout << "the current should start between " << start << " and " << stop << endl;
-				cin.clear();
-			}
-	} 
-    
-    cout << "End the current at (step) : ";
-    
-    while (Istop <= 0.0 or Istop > stop or Istop <= Istart) {
-		cin >> Istop;
-			if (Istop < 0.0 or Istop > stop or Istop <= Istart) { 
-				cout << "the current should stop between " << Istart << " and " << stop << endl;
-				cin.clear();
-			}
-	} 
-    */
-    /*
-    cout << "Choose your current : ";
-    
-    while (I <= 0.0) {
-		cin >> I;  
-			if (I <= 0.0) {
-				cout << "the current should be positive" << endl;
-				cin.clear();
-			}
-		}
-		*/
-    
     ofstream data("spikes.txt"); ///< open the file where the values will be written
     
     bool spike(false); ///< initiate a boolean that will be used after to determine whether the neuron is spiking or not
@@ -136,42 +91,6 @@ int main()
 	///
 	while(currentStep < stop) {
 		
-		/*cout << "currentstep  " << currentStep << endl;
-		
-		if (Istart > start and Istop < stop and I > 0
-			and Istart < currentStep and Istop > currentStep) {
-	
-				for (int i(0); i < numberNeurons; ++i) {
-					
-					neurons[i].setIExt(I);
-		
-					spike = neurons[i].update(1); 
-					
-					if (spike) {
-						
-						data << neurons[i].getClock() * h << '\t' << i << '\n';
-						
-						for (int j(0); j < numberNeurons; ++j) {
-							
-							if (network[i][j] != 0) {
-								
-								neurons[j].receive(currentStep, network[i][j] * neurons[i].getAmplitude());  ///<network[i][j] * neurons[i].getAmplitude() because if the neuron is connected multiple times with neurons[j] it should give multiple signals
-							
-					}
-		
-				}
-			
-			}
-		
-		}
-		
-		//data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
-	
-	}
-	
-	else { 
-	*/
-		
 		for (int i(0); i < numberNeurons; ++i) {
 					
 					neurons[i].setIExt(Iext);
@@ -189,15 +108,6 @@ int main()
 					}
 				}
 			}
-			
-			// data << neurons[1].getClock() * h << '\t' << neurons[1].getMembranePot() << '\n';
-		
-		//}
-		
-		//data << "Neuron 1 : " << neurons[1].getClock() * h << '\t' << '\t' << neurons[1].getMembranePot() << '\t' << '\t' << endl;
-			
-	//}
-	
 		
 		cout << currentStep << endl;
 		
