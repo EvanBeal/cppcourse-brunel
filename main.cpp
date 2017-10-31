@@ -30,11 +30,13 @@ int main()
     
     double currentStep(0);
     
-    ofstream data("spikes.txt"); ///< open the file where the values will be written
+    //ofstream data("spikes.txt"); ///< open the file where the values will be written
     
-    bool spike(false); ///< initiate a boolean that will be used after to determine whether the neuron is spiking or not
+    //bool spike(false); ///< initiate a boolean that will be used after to determine whether the neuron is spiking or not
     
     Network network; ///< create a network of neurons with their connections
+    
+    ofstream data("spikes.txt"); ///< open the file where the values will be written
     
     /*
     ///
@@ -96,12 +98,11 @@ int main()
 	*/
 	
 	///
-	/// running the simulation by updating the neuron every time step
-	/// and seeing if they spike or not anf if they spike then giving the signal to the post synaptic neurons
+	/// running the simulation by updating the network every time step
 	///
 	while(currentStep < stop) {
 		
-		for (int i(0); i < numberNeurons; ++i) {
+		/*for (int i(0); i < numberNeurons; ++i) {
 					
 					//neurons[i].setIExt(Iext);
 					//network.getNeuron(i).setIExt(Iext);
@@ -121,7 +122,7 @@ int main()
 							
 					}
 					*/
-					
+					/*
 						for (int j(0); j < network.getNetworkSize(i); ++j) {
 							
 							network.getNeuron(network.getNeuronConnected(i, j)).receive(currentStep, network.getNeuron(i).getAmplitude());
@@ -130,10 +131,15 @@ int main()
 			}
 		
 		cout << currentStep << endl;
+		*/
+		
+		network.update(currentStep, data);
 		
 		currentStep += 1;
 	
 	}
+	
+	
 
      data.close();
     

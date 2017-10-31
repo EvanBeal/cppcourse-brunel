@@ -3,6 +3,7 @@
 #include <random>
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -18,17 +19,17 @@ Network::Network()
 					{
 						for (int i(0); i < numberNeurons * 0.8; ++i) { 
 							Neuron n(excitatory);
-							neurons_.push_back(n);
+							neurons.push_back(n);
 						}
 						
 						for (int i(numberNeurons * 0.8 + 1); i <= numberNeurons; ++i) { 
 							Neuron n(inhibitory);
-							neurons_.push_back(n);
+							neurons.push_back(n);
 						}
 						
 						for (int i(0); i < numberNeurons; ++i) { 
 							vector<int> neuronList;
-							network_.push_back(neuronList);
+							network.push_back(neuronList);
 		
 						}
 						
@@ -38,20 +39,20 @@ Network::Network()
 								static random_device rd;  
 								static mt19937 gen(rd()); 
 								static uniform_int_distribution<> connectionFromExcitatory(0, numberNeurons * 0.8 - 1);
-								network_[connectionFromExcitatory(gen)].push_back(j);
+								network[connectionFromExcitatory(gen)].push_back(j);
 							}
 		
 							for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the inhibitory neurons
 								static random_device rd;  
 								static mt19937 gen(rd()); 
 								static uniform_int_distribution<> connectionFromInhibitory(numberNeurons * 0.8, numberNeurons - 1);
-								network_[connectionFromInhibitory(gen)].push_back(j);	 
+								network[connectionFromInhibitory(gen)].push_back(j);	 
 							}
 			
 						}
 					}
 
-
+/*
 ///
 /// getter of a neuron of neurons
 /// @param int x that is the positon of the neuron of interest in the vector neurons
@@ -60,7 +61,7 @@ Network::Network()
 
 Neuron Network::getNeuron(int x)
 {
-	return neurons_[x];	
+	return neurons[x];	
 }
 
 ///
@@ -71,7 +72,7 @@ Neuron Network::getNeuron(int x)
 
 int Network::getNetworkSize(int x)
 {
-	return network_[x].size();
+	return network[x].size();
 }
 
 ///
@@ -82,11 +83,61 @@ int Network::getNetworkSize(int x)
 
 int Network::getNeuronConnected(int x, int y)
 {
-	return network_[x][y];
+	return network[x][y];
 }
+*/
+
+///
+///updating the network
+/// and seeing if the neurons spike or not and if they spike then giving the signal to the post synaptic neurons
+/// and writing the time where the neuron spike and which neuron it is in a file giving in argument
+/// @param the current step of the simulation and a file data where it will be possible to write on it in order to store the data of our simulation
+///
 	
+void Network::update(double currentStep, ofstream& data)
+{
+	//if (currentStep == 0)
+	 //ofstream data("spikes.txt"); ///< open the file where the values will be written
 	
+	//while(currentStep < stop) {
 	
+	bool spike(false);
+		
+		for (int i(0); i < numberNeurons; ++i) {
+					
+					//neurons[i].setIExt(Iext);
+					//network.getNeuron(i).setIExt(Iext);
+		
+					spike = neurons[i].update(1);
+					//spike = network.getNeuron(i).update(1);
+					
+					if (spike) {
+						
+						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
+						//data << network.getNeuron(i).getClock() * h << '\t' << i + 1 << '\n';
+						
+						
+						for (int j(0); j < network[i].size(); ++j) {
+								
+								neurons[network[i][j]].receive(currentStep, neurons[i].getAmplitude());  
+							
+					}
+					/*
+					
+						for (int j(0); j < network.getNetworkSize(i); ++j) {
+							
+							network.getNeuron(network.getNeuronConnected(i, j)).receive(currentStep, network.getNeuron(i).getAmplitude());
+					}
+					*/
+				}
+			}
+		
+		cout << currentStep << endl;
+		
+		currentStep += 1;
+	
+	//}
+}
 	
 	
 	
