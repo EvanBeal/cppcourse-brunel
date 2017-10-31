@@ -150,7 +150,7 @@ bool Neuron::update(long steps)
 		
 		else {
 			//static std::poisson_distribution<> poisson(Vext_ * connexionExcitatory_ * h_ * amplitude_);
-			static std::poisson_distribution<> poisson(2); ///< static so it exists only once and like this we don't create pattern
+			static std::poisson_distribution<> poisson(Vext_ * h); ///< static so it exists only once and like this we don't create pattern
 			static std::random_device rd;
 			static std::mt19937 gen(rd());
 			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);

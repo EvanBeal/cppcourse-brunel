@@ -79,7 +79,7 @@ void Network::update(double currentStep, ofstream& data)
 					}
 				}
 		
-		cout << currentStep << endl;
+		//cout << currentStep << endl;
 		
 		currentStep += 1;
 }

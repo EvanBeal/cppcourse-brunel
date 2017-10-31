@@ -16,7 +16,7 @@
     const double connexionExcitatory_ = 1000; ///<the number of connexion that the neuron receives from exctitatories neurons
     const double connexionInhibitory_ = 250; ///<the number of connexion that the neuron receives from inhibitories neurons
     
-    const double Vext_ = 0.02; ///<the number of spikes per connexion * ms
+    const double Vext_ = 20; ///<the number of spikes per connexion / ms
     
     ///
     ///Steps
