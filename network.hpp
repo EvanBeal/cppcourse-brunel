@@ -19,14 +19,6 @@ class Network
 	public : 
 	Network(); ///<constructor
 	
-	/*
-	Neuron getNeuron(int x); ///< return the neuron of neurons at position x
-	
-	int getNetworkSize(int x); ///< return the number of column that has the line x which reprensent the number of neurons that are connected to the neuron reprensented on line x
-	
-	int getNeuronConnected(int x, int y); ///< return the number in network at position x and y which represent the neuron y that is connected to neuron x
-	*/
-	
 	void update(double simStep, ofstream& data); ///< update of the network that look whether the neurons are spiking or not
 	
 };
