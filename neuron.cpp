@@ -130,7 +130,6 @@ bool Neuron::update(long steps)
 			++nbSpikes_;
 			timeSpike_ = clock_;
 			spikeState = true;
-			//std::cout << "update --> spike" << std::endl;
 		}
 		
 		///
@@ -139,7 +138,6 @@ bool Neuron::update(long steps)
 		
 		if (timeSpike_ > 0 and (clock_ - timeSpike_ < refractorySteps_)) {    ///<if neuron is refractory we have to reset the membrane potential
 			
-			//std::cout << "update --> refractory" << std::endl;
 			membranePot_ = 0.0;
 			
 		}
@@ -149,13 +147,11 @@ bool Neuron::update(long steps)
 		///
 		
 		else {
-			//static std::poisson_distribution<> poisson(Vext_ * connexionExcitatory_ * h_ * amplitude_);
 			static std::poisson_distribution<> poisson(Vext_ * h); ///< static so it exists only once and like this we don't create pattern
 			static std::random_device rd;
 			static std::mt19937 gen(rd());
 			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);
 			ringBuffer_[steps % x] = 0.0;
-			//std::cout << membranePot_ << std::endl;
 		}
 		
 		

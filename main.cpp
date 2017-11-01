@@ -23,20 +23,28 @@ int main()
 	///
 	while(currentStep < stop) {
 		
-		int x(currentStep * 100/stop);
+		int x(currentStep * 10/stop);
 		
 		network.update(currentStep, data);
 		
 		currentStep += 1;
 		
-		if (currentStep == 0 or (y % 100) != (x % 100)) {
-			cout << x << "%" << endl;
+		if (currentStep == 0 or (y % 1000) != (x % 1000)) {
+			cout << 10 * x << "%" << endl;
 			y = x;
 		}
 	
 	}
 	
-     data.close(); ///< close the file where the values are now written
+	cout << "100%" << endl;
+	
+	cout << "Simulation done" << endl;
+	
+	cout << "Total of spike during the simulation : " << Network::totalSpikes << endl;
+	
+	cout << "Average number of spike per neuron : " << Network::totalSpikes/numberNeurons << endl;
+	
+    data.close(); ///< close the file where the values are now written
     
-     return 0;
+    return 0;
 }

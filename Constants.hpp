@@ -33,7 +33,7 @@
     ///
     ///test with a network of 12'500 neurons with 80% of excitatory neurons and 20% of inhibitory
     ///
-    const int numberNeurons(12500);
+    const double numberNeurons(12500);
 
 
 #endif

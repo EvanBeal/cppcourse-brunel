@@ -21,6 +21,8 @@ class Network
 	
 	void update(double simStep, ofstream& data); ///< update of the network that look whether the neurons are spiking or not
 	
+	static double totalSpikes; ///< static element that counts the total of spikes during a simulation
+	
 };
 
 #endif

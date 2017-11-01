@@ -7,6 +7,8 @@
 
 using namespace std;
 
+double Network::totalSpikes = 0;
+
 ///
 ///constructor of network 
 ///initialization of the 10'000 first neurons to the excitatory type
@@ -68,6 +70,8 @@ void Network::update(double currentStep, ofstream& data)
 					spike = neurons[i].update(1);
 					
 					if (spike) {
+						
+						++ totalSpikes;
 						
 						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
 						
