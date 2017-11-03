@@ -2,6 +2,7 @@
 #include <cmath>
 #include <random>
 #include <iostream>
+#include <cassert>
 
 ///
 /// constructor of neuron whith the type given in parametre that determines the amplitude
@@ -110,7 +111,7 @@ bool Neuron::update(long steps)
 {   
     bool spikeState = false; ///< initiate the spike state that will be return at the end of the function at false
     
-    int x(D_/h_ + 1); ///< will be used for the ringbuffer
+    size_t x(D_/h_ + 1); ///< will be used for the ringbuffer
     
     if (steps < 0) return false; ///< we can't update if there isn't a positive number of steps
     
@@ -151,6 +152,8 @@ bool Neuron::update(long steps)
 			static std::random_device rd;
 			static std::mt19937 gen(rd());
 			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);
+			//assert((steps % x) >= 0);
+			//assert((steps % x) <= ringBuffer_.size());
 			ringBuffer_[steps % x] = 0.0;
 		}
 		
@@ -172,7 +175,7 @@ bool Neuron::updateTest(long steps)
 {   
     bool spikeState = false; ///< initiate the spike state that will be return at the end of the function at false
     
-    int x(D_/h_ + 1); ///< will be used for the ringbuffer
+    size_t x(D_/h_ + 1); ///< will be used for the ringbuffer
     
     if (steps < 0) return false; ///< we can't update if there isn't a positive number of steps
     
@@ -210,6 +213,8 @@ bool Neuron::updateTest(long steps)
 		
 		else {
 			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[t_stop % x];
+			//assert((steps % x) >= 0);
+			//assert((steps % x) <= ringBuffer_.size());
 			ringBuffer_[t_stop % x] = 0.0;
 		}
 		
@@ -228,9 +233,10 @@ bool Neuron::updateTest(long steps)
 
 void Neuron::receive(long steps, double amplitude)
 {
-	int x(D_/h_ + 1);
-	int y(D_/h_);
-	ringBuffer_[(steps + y) % x] += amplitude;
+	size_t x(D_/h_);
+	//assert(((steps + x) % (x + 1)) >= 0);
+	//assert(((steps + x) % (x + 1)) <= ringBuffer_.size());
+	ringBuffer_[(steps + x) % (x + 1)] += amplitude;
 } 
     
     

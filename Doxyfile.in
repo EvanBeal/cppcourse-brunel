@@ -1,0 +1,2 @@
+PROJECT_NAME = Neurons
+INPUT = main.cpp neuron.cpp neuron.hpp network.cpp network.hpp Constants.hpp neuron_unittest.cpp

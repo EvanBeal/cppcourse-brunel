@@ -22,7 +22,7 @@
     ///Steps
     ///
     const double start(0);
-    const double stop(2000);
+    const double stop(10000);
     const double h(0.1); ///<1 step = 0.1ms
     
     ///

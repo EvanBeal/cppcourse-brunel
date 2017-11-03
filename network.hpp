@@ -14,7 +14,7 @@ class Network
 {
 	private : 
 	vector<Neuron> neurons; ///< the 10'000 first neurons are the excitatory ones and the 2500 following are the inhibitory
-    vector<vector<int>> network; ///< the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
+    vector<vector<size_t>> network; ///< the network of the connections between the neurons (if we want to know to which neuron is connected to the neuron 5 for example we look on the line 5 and see the number on the column to know to which neuron it's connected)
 	
 	public : 
 	Network(); ///<constructor

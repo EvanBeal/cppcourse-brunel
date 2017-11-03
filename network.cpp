@@ -4,10 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cassert>
 
 using namespace std;
 
-double Network::totalSpikes = 0;
+double Network::totalSpikes = 0; ///< count the total number of spike during the simulation
 
 ///
 ///constructor of network 
@@ -19,35 +20,39 @@ double Network::totalSpikes = 0;
 
 Network::Network()
 					{
-						for (int i(0); i < numberNeurons * 0.8; ++i) { 
+						for (size_t i(0); i < numberNeurons * 0.8; ++i) { 
 							Neuron n(excitatory);
 							neurons.push_back(n);
 						}
 						
-						for (int i(numberNeurons * 0.8 + 1); i <= numberNeurons; ++i) { 
+						for (size_t i(numberNeurons * 0.8 + 1); i <= numberNeurons; ++i) { 
 							Neuron n(inhibitory);
 							neurons.push_back(n);
 						}
 						
-						for (int i(0); i < numberNeurons; ++i) { 
-							vector<int> neuronList;
+						for (size_t i(0); i < numberNeurons; ++i) { 
+							vector<size_t> neuronList;
 							network.push_back(neuronList);
 		
 						}
 						
 						for (int j(0); j < numberNeurons; ++j) {
 			
-							for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the excitatory neurons
+							for (size_t i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the excitatory neurons
 								static random_device rd;  
 								static mt19937 gen(rd()); 
 								static uniform_int_distribution<> connectionFromExcitatory(0, numberNeurons * 0.8 - 1);
+								//assert(connectionFromExcitatory(gen) >= 0);
+								//assert(connectionFromExcitatory(gen) <= numberNeurons * 0.8 - 1);
 								network[connectionFromExcitatory(gen)].push_back(j);
 							}
 		
-							for (int i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the inhibitory neurons
+							for (size_t i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the inhibitory neurons
 								static random_device rd;  
 								static mt19937 gen(rd()); 
 								static uniform_int_distribution<> connectionFromInhibitory(numberNeurons * 0.8, numberNeurons - 1);
+								//assert(connectionFromInhibitory(gen) >= numberNeurons * 0.8);
+								//assert(connectionFromInhibitory(gen) <= numberNeurons - 1);
 								network[connectionFromInhibitory(gen)].push_back(j);	 
 							}
 			
@@ -55,35 +60,29 @@ Network::Network()
 					}
 
 ///
-///updating the network
+/// updating the network
 /// and seeing if the neurons spike or not and if they spike then giving the signal to the post synaptic neurons
 /// and writing the time where the neuron spike and which neuron it is in a file giving in argument
 /// @param the current step of the simulation and a file data where it will be possible to write on it in order to store the data of our simulation
 ///
 	
 void Network::update(double currentStep, ofstream& data)
-{	
-	bool spike(false);
-		
-		for (int i(0); i < numberNeurons; ++i) {
+{		
+		for (size_t i(0); i < numberNeurons; ++i) {
 					
-					spike = neurons[i].update(1);
-					
-					if (spike) {
+					if (neurons[i].update(1)) {
 						
 						++ totalSpikes;
 						
 						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
 						
-							for (int j(0); j < network[i].size(); ++j) {
+							for (size_t j(0); j < network[i].size(); ++j) {
 								
 								neurons[network[i][j]].receive(currentStep, neurons[i].getAmplitude());  
 							
 						}
 					}
 				}
-		
-		//cout << currentStep << endl;
 		
 		currentStep += 1;
 }
