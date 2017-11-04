@@ -1,3 +1,5 @@
+## FINAL VERSION ##
+
 project(neuron)
 cmake_minimum_required (VERSION 2.6)
 set(CMAKE_CXX_FLAGS " -W -Wall -pedantic -std=c++11")
