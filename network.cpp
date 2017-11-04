@@ -1,5 +1,6 @@
+//**** FINAL VERSION ****//
+
 #include "network.hpp"
-#include <cmath>
 #include <random>
 #include <iostream>
 #include <vector>
@@ -7,6 +8,10 @@
 #include <cassert>
 
 using namespace std;
+
+///
+///@class Network that creates a network with neurons and connections between them and update the network by updating each neuron
+///
 
 double Network::totalSpikes = 0; ///< count the total number of spike during the simulation
 
@@ -78,7 +83,7 @@ void Network::update(double currentStep, ofstream& data)
 						
 							for (size_t j(0); j < network[i].size(); ++j) {
 								
-								neurons[network[i][j]].receive(currentStep, neurons[i].getAmplitude());  
+								neurons[network[i][j]].receive(currentStep + D_/h_, neurons[i].getAmplitude());  
 							
 						}
 					}

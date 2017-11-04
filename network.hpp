@@ -1,12 +1,12 @@
+//**** FINAL VERSION ****//
+
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
 #include "Constants.hpp"
 #include "neuron.hpp"
-#include <cassert>
 #include <vector>
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 

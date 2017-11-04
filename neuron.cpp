@@ -1,8 +1,14 @@
+//**** FINAL VERSION ****//
+
 #include "neuron.hpp"
 #include <cmath>
 #include <random>
 #include <iostream>
 #include <cassert>
+
+///
+///@class Neuron that updates a neuron and determine if it spikes or not
+///
 
 ///
 /// constructor of neuron whith the type given in parametre that determines the amplitude
@@ -111,7 +117,7 @@ bool Neuron::update(long steps)
 {   
     bool spikeState = false; ///< initiate the spike state that will be return at the end of the function at false
     
-    size_t x(D_/h_ + 1); ///< will be used for the ringbuffer
+    size_t x(D_/h_); ///< will be used for the ringbuffer
     
     if (steps < 0) return false; ///< we can't update if there isn't a positive number of steps
     
@@ -151,13 +157,13 @@ bool Neuron::update(long steps)
 			static std::poisson_distribution<> poisson(Vext_ * h); ///< static so it exists only once and like this we don't create pattern
 			static std::random_device rd;
 			static std::mt19937 gen(rd());
-			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);
-			//assert((steps % x) >= 0);
-			//assert((steps % x) <= ringBuffer_.size());
-			//ringBuffer_[t_stop % x] = 0.0;
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[clock_ % x] + poisson(gen);
+			//assert((clock_ % x) >= 0);
+			//assert((clock_ % x) <= ringBuffer_.size());
+			//ringBuffer_[clock_ % x] = 0.0;
 		}
 		
-		ringBuffer_[t_stop % x] = 0.0;
+		ringBuffer_[clock_ % x] = 0.0;
 		
 		
 		++clock_;
@@ -214,13 +220,13 @@ bool Neuron::updateTest(long steps)
 		///
 		
 		else {
-			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[t_stop % x]; ///<without the poisson factor to avoid the random parametre 
-			//assert((steps % x) >= 0);
-			//assert((steps % x) <= ringBuffer_.size());
-			//ringBuffer_[t_stop % x] = 0.0;
+			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[clock_ % x]; ///<without the poisson factor to avoid the random parametre 
+			//assert((clock_ % x) >= 0);
+			//assert((clock_ % x) <= ringBuffer_.size());
+			//ringBuffer_[clock_ % x] = 0.0;
 		}
 		
-		ringBuffer_[t_stop % x] = 0.0;
+		ringBuffer_[clock_ % x] = 0.0;
 		
 		++clock_;
 		
@@ -236,10 +242,10 @@ bool Neuron::updateTest(long steps)
 
 void Neuron::receive(long steps, double amplitude)
 {
-	size_t x(D_/h_);
-	//assert(((steps + x) % (x + 1)) >= 0);
-	//assert(((steps + x) % (x + 1)) <= ringBuffer_.size());
-	ringBuffer_[(steps + x) % (x + 1)] += amplitude;
+	size_t x(D_/h_ + 1);
+	//assert(((steps) % (x)) >= 0);
+	//assert(((steps) % (x)) <= ringBuffer_.size());
+	ringBuffer_[steps % x] += amplitude;
 } 
     
     

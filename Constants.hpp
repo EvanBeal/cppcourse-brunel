@@ -1,6 +1,11 @@
+//**** FINAL VERSION ****//
+
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
+///
+///@file Constants that stores all the constants used in the programm
+///
 
     const double tau_ = 20.0; ///<membrane time constant = Membrane resistance * C
     const double tauRef_ = 2.0; ///<refractory time(ms)

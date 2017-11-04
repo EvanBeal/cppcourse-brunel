@@ -1,12 +1,15 @@
+//**** FINAL VERSION ****//
+
 #include <iostream>
 #include "network.hpp"
 
 #include <fstream>
-#include <vector>
-#include <array>
-#include <random>
 
 using namespace std;
+
+///
+///@file main that runs the simulation
+///
 
 int main()
 {   

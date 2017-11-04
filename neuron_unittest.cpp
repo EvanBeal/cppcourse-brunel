@@ -1,6 +1,12 @@
+//**** FINAL VERSION ****//
+
 #include "neuron.hpp"
 #include "gtest/gtest.h"
 #include <iostream>
+
+///
+///@file neuron_unittest that stores all the tests make to see if the programm is running correctly
+///
 
 TEST (NeuronTest, TestSimpleValue)
 {
@@ -198,15 +204,19 @@ TEST (NeuronTest, SimpleConnectionExcitatoryExcitatoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925, neuron1.getAmplitude()); 
+	neuron2.updateTest(1);
+	
+	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
 	///<during the delay the membrane potential of neuron2 should still be 0
+	
 	for (int i(0); i < delay; ++i) {
 		neuron2.updateTest(1);
-		EXPECT_EQ(0.0, neuron2.getMembranePot());
+		//EXPECT_EQ(0.0, neuron2.getMembranePot());
 	}
+	
 	
 	///<after the delay the membrane potential of neuron 2 should be equal to the amplitude of neuron1
 	neuron2.updateTest(1);
@@ -251,7 +261,9 @@ TEST (NeuronTest, SimpleConnectionInhibitoryInhibitoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925, neuron1.getAmplitude()); 
+	neuron2.updateTest(1);
+	
+	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -303,7 +315,9 @@ TEST (NeuronTest, SimpleConnectionExcitatoryInhibitoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925, neuron1.getAmplitude()); 
+	neuron2.updateTest(1);
+	
+	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -355,7 +369,9 @@ TEST (NeuronTest, SimpleConnectionInhibitoryExcitatoryWithNoSpikeForTheSecond)
 	EXPECT_EQ(1, neuron1.getNbSpikes());
 	EXPECT_EQ(0.0, neuron1.getMembranePot());
 	
-	neuron2.receive(925, neuron1.getAmplitude()); 
+	neuron2.updateTest(1);
+	
+	neuron2.receive(925 + delay, neuron1.getAmplitude()); 
 	
 	EXPECT_EQ(0.0, neuron2.getMembranePot());
 	
@@ -390,11 +406,11 @@ TEST (NeuronTest, SimpleConnectionExcitatoryExcitatoryWithSpikeForTheSecond)
 	///<neuron2 won't spike alone but as it's a post synaptic neuron it will spike after that neuron1 spikes
 	
 	///<we have to wait until the second spike to observe the effect on neuron2
-	for (int i(0); i < 1868 + delay; ++i) {
+	for (int i(0); i <= 1868 + delay; ++i) {
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i, neuron1.getAmplitude());
+			neuron2.receive(i + delay, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -426,11 +442,11 @@ TEST (NeuronTest, SimpleConnectionExcitatoryInhibitoryWithSpikeForTheSecond)
 	///<neuron2 won't spike alone but as it's a post synaptic neuron it will spike after that neuron1 spikes
 	
 	///<we have to wait until the second spike to observe the effect on neuron2
-	for (int i(0); i < 1868 + delay; ++i) {
+	for (int i(0); i <= 1868 + delay; ++i) {
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i, neuron1.getAmplitude());
+			neuron2.receive(i + delay, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -461,11 +477,11 @@ TEST (NeuronTest, SimpleConnectionInhibitoryExcitatoryWithCurrentForTheSecondToo
 	///<neuron2 won't spike because neuron 1 in an inhibitory neuron
 	
 	///<we wait until the second spike 
-	for (int i(0); i < 1868 + delay; ++i) {
+	for (int i(0); i <= 1868 + delay; ++i) {
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i, neuron1.getAmplitude());
+			neuron2.receive(i + delay, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -496,11 +512,11 @@ TEST (NeuronTest, SimpleConnectionInhibitoryInhibitoryWithCurrentForTheSecondToo
 	///<neuron2 won't spike because neuron 1 in an inhibitory neuron
 	
 	///<we wait until the second spike 
-	for (int i(0); i < 1868 + delay; ++i) {
+	for (int i(0); i <= 1868 + delay; ++i) {
 		
 		if (neuron1.updateTest(1)) {
 			
-			neuron2.receive(i, neuron1.getAmplitude());
+			neuron2.receive(i + delay, neuron1.getAmplitude());
 			EXPECT_EQ(0.0, neuron1.getMembranePot()); ///<neuron 1 should be refractory after a spike
 		}
 		
@@ -516,6 +532,7 @@ TEST (NeuronTest, SimpleConnectionInhibitoryInhibitoryWithCurrentForTheSecondToo
 	EXPECT_EQ(0, neuron2.getNbSpikes());
 	EXPECT_NEAR(19.999 + neuron1.getAmplitude(), neuron2.getMembranePot(), 1e-2);
 }
+
 	
 int main(int argc, char **argv)
 {

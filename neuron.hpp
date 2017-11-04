@@ -1,8 +1,9 @@
+//**** FINAL VERSION ****//
+
 #ifndef NEURON_HPP
 #define NEURON_HPP
 
 #include "Constants.hpp"
-#include <cassert>
 #include <vector>
 
 enum Type {inhibitory, excitatory}; ///<determine the type of neuron
