@@ -1,4 +1,4 @@
-# CS116-2017-Evan-Beal
+# cppcourse-brunel-EvanBeal
 Neuron Program
 
 This project represents a simulation of a network of neurons based on the work of Nicolas Brunel "Dynamics of Sparsely Connected Networks of Excitatory and Inhibitory Spiking Neurons".
