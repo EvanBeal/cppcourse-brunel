@@ -154,10 +154,10 @@ bool Neuron::update(long steps)
 			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[steps % x] + poisson(gen);
 			//assert((steps % x) >= 0);
 			//assert((steps % x) <= ringBuffer_.size());
-			ringBuffer_[t_stop % x] = 0.0;
+			//ringBuffer_[t_stop % x] = 0.0;
 		}
 		
-		//ringBuffer_[t_stop % x] = 0.0;
+		ringBuffer_[t_stop % x] = 0.0;
 		
 		
 		++clock_;
@@ -217,10 +217,10 @@ bool Neuron::updateTest(long steps)
 			membranePot_ = c1_ * membranePot_ + iExt_ * c2_ + ringBuffer_[t_stop % x]; ///<without the poisson factor to avoid the random parametre 
 			//assert((steps % x) >= 0);
 			//assert((steps % x) <= ringBuffer_.size());
-			ringBuffer_[t_stop % x] = 0.0;
+			//ringBuffer_[t_stop % x] = 0.0;
 		}
 		
-		//ringBuffer_[t_stop % x] = 0.0;
+		ringBuffer_[t_stop % x] = 0.0;
 		
 		++clock_;
 		
