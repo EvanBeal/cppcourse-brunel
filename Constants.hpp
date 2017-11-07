@@ -15,13 +15,13 @@
     const long refractorySteps_ = tauRef_/h_; ///<steps per tauRef_
     
     const double amplitudeExcitatory_ = 0.1; ///<the amplitude (J) of the excitatory neuron
-    const double amplitudeInhibitory_ = -0.5; ///<the amplitude (J) of the inhibitory neuron
+    //const double amplitudeInhibitory_ = -0.5; ///<the amplitude (J) of the inhibitory neuron
     const double D_ = 1.5; ///<the delay
     
     const double connexionExcitatory_ = 1000; ///<the number of connexion that the neuron receives from exctitatories neurons
     const double connexionInhibitory_ = 250; ///<the number of connexion that the neuron receives from inhibitories neurons
     
-    const double Vext_ = 20; ///<the number of spikes per connexion / ms
+    //const double Vext_ = 20; ///<the number of spikes per connexion / ms
     
     ///
     ///Steps
@@ -39,6 +39,38 @@
     ///test with a network of 12'500 neurons with 80% of excitatory neurons and 20% of inhibitory
     ///
     const double numberNeurons(12500);
+    
+    /*
+    ///< graph A
+    const double amplitudeInhibitory_ = -0.3; ///<the amplitude (J) of the inhibitory neuron
+    const double Vext_ = 20; ///<the number of spikes per connexion / ms    
+    const double startCollectingData = 5000; ///<the time in steps where we start to collect data
+    const double stopCollectingData = 6000; ///<the time in steps where we stop to collect data
+    */
+ 
+	/*
+    ///< graph B
+    const double amplitudeInhibitory_ = -0.6; ///<the amplitude (J) of the inhibitory neuron
+    const double Vext_ = 40; ///<the number of spikes per connexion / ms  
+    const double startCollectingData = 10000; ///<the time in steps where we start to collect data
+    const double stopCollectingData = 12000; ///<the time in steps where we stop to collect data 
+    */
+    
+    
+    ///< graph C
+    const double amplitudeInhibitory_ = -0.5; ///<the amplitude (J) of the inhibitory neuron
+    const double Vext_ = 20; ///<the number of spikes per connexion / ms
+    const double startCollectingData = 10000; ///<the time in steps where we start to collect data
+    const double stopCollectingData = 12000; ///<the time in steps where we stop to collect data 
+    
+    
+    /*
+    ///< graph D
+    const double amplitudeInhibitory_ = -0.45; ///<the amplitude (J) of the inhibitory neuron
+    const double Vext_ = 9; ///<the number of spikes per connexion / ms    
+    const double startCollectingData = 10000; ///<the time in steps where we start to collect data
+    const double stopCollectingData = 12000; ///<the time in steps where we stop to collect data 
+    */
 
 
 #endif

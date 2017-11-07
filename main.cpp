@@ -26,9 +26,9 @@ int main()
 	///
 	/// running the simulation by updating the network every time step until it reaches stop, the end of the simulation
 	///
-	while(currentStep < stop) {
+	while(currentStep < stopCollectingData) {
 		
-		int x(currentStep * 100/stop);
+		int x(currentStep * 100/stopCollectingData);
 		
 		network.update(currentStep, data);
 		

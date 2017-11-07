@@ -52,7 +52,7 @@ Network::Network()
 								network[connectionFromExcitatory(gen)].push_back(j);
 							}
 		
-							for (size_t i(0); i < numberNeurons * 0.8 * 0.1; ++i) { ///< create the random connections with the inhibitory neurons
+							for (size_t i(0); i < numberNeurons * 0.2 * 0.1; ++i) { ///< create the random connections with the inhibitory neurons
 								static random_device rd;  
 								static mt19937 gen(rd()); 
 								static uniform_int_distribution<> connectionFromInhibitory(numberNeurons * 0.8, numberNeurons - 1);
@@ -77,14 +77,18 @@ void Network::update(double currentStep, ofstream& data)
 					
 					if (neurons[i].update(1)) {
 						
-						++ totalSpikes;
+						if (currentStep >= startCollectingData and currentStep <= stopCollectingData) {
 						
-						data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
+							++ totalSpikes;
 						
-							for (size_t j(0); j < network[i].size(); ++j) {
+								data << neurons[i].getClock() * h << '\t' << i + 1 << '\n';
 								
-								neurons[network[i][j]].receive(currentStep + D_/h_, neurons[i].getAmplitude());  
-							
+							}
+						
+									for (size_t j(0); j < network[i].size(); ++j) {
+								
+										neurons[network[i][j]].receive(currentStep + D_/h_, neurons[i].getAmplitude()); 
+										 
 						}
 					}
 				}
