@@ -12,4 +12,4 @@ There are two classes in this project : Neuron, that represents the simulation o
 There are three other files : main, that runs the programm, Constants, where the different constants of the programm are stored and neuron_unittest, where there are different tests that test the programm.
 
 To create the documentation associated to the code, the user can use Doxygen. By entering make doc in the terminal this will directly create all the documentation.
-To visualize the results, the user has to go to the following site : https://cs116-plot.antoinealb.net and upload the file spikes.txt that has been created during the simulation and where there is the spike's time and the id of the neuron that spike.
+To visualize the results, the user has to go to the following site : https://cs116-plot.antoinealb.net and upload the file spikes.txt that has been created during the simulation and where there is the spike's time and the id of the neuron that spike.Or he can create the graph himself using jupyter for example.
